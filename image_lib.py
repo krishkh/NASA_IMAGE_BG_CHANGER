@@ -1,6 +1,9 @@
 '''
 Library of useful functions for working with images.
 '''
+import requests
+import ctypes
+
 def main():
     # TODO: Add code to test the functions in this module
     return
@@ -17,7 +20,14 @@ def download_image(image_url):
         bytes: Binary image data, if succcessful. None, if unsuccessful.
     """
     # TODO: Complete function body
-    return
+    
+    try:
+        response = requests.get(image_url)
+        if response.status_code == 200:
+            return response.content
+    except Exception:
+        return None
+    return None
 
 def save_image_file(image_data, image_path):
     """Saves image data as a file on disk.
@@ -31,8 +41,14 @@ def save_image_file(image_data, image_path):
     Returns:
         bool: True, if succcessful. False, if unsuccessful
     """
-    # TODO: Complete function body
-    return
+    # TODO: Complete function body 
+    
+    try:
+        with open(image_path, 'wb') as f:
+            f.write(image_data)
+        return True
+    except Exception:
+        return False
 
 def set_desktop_background_image(image_path):
     """Sets the desktop background image to a specific image.
@@ -44,7 +60,12 @@ def set_desktop_background_image(image_path):
         bytes: True, if succcessful. False, if unsuccessful        
     """
     # TODO: Complete function body
-    return
+    try:
+        # ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, image_path, 3)
+        ctypes.windll.user32.SystemParametersInfoW(20, 0, image_path, 3)
+        return True
+    except Exception:
+        return False
 
 def scale_image(image_size, max_size=(800, 600)):
     """Calculates the dimensions of an image scaled to a maximum width
